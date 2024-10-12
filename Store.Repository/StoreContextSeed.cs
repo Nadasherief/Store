@@ -17,15 +17,7 @@ namespace Store.Repository
         public static async  Task SeedAsync(StoreDbContext StoreDbContext, ILoggerFactory loggerFactory )
         {
             try
-            {
-                if (StoreDbContext.productBrands != null && !StoreDbContext.productBrands.Any()) 
-                {
-                    var brandData = File.ReadAllText("../Store.Repository/SeedData/SeedData/brands.json");
-                    var brands = JsonSerializer.Deserialize<List<ProductBrand>>(brandData);
-                    if (brands is not null) {
-                        await StoreDbContext.productBrands.AddRangeAsync(brands);
-                    }
-                }
+            { 
                 if (StoreDbContext.productTypes != null && !StoreDbContext.productTypes.Any())
                 {
                     var ProductTypeData = File.ReadAllText("../Store.Repository/SeedData/SeedData/types.json");
@@ -35,6 +27,15 @@ namespace Store.Repository
                         await StoreDbContext.productTypes.AddRangeAsync(ProductTypes);
                     }
                 }
+                if (StoreDbContext.productBrands != null && !StoreDbContext.productBrands.Any()) 
+                {
+                    var brandData = File.ReadAllText("../Store.Repository/SeedData/SeedData/brands.json");
+                    var brands = JsonSerializer.Deserialize<List<ProductBrand>>(brandData);
+                    if (brands is not null) {
+                        await StoreDbContext.productBrands.AddRangeAsync(brands);
+                    }
+                }
+               
                 if (StoreDbContext.products != null && !StoreDbContext.products.Any())
                 {
                     var ProductData = File.ReadAllText("../Store.Repository/SeedData/SeedData/products.json");
