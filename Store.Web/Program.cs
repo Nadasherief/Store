@@ -1,9 +1,16 @@
 
+using Microsoft.EntityFrameworkCore;
+using Store.Data.Context;
+using Store.Repository.InterFace;
+using Store.Repository.UnitOfWork;
+using Store.Web.Helper;
+using System.Runtime.CompilerServices;
+
 namespace Store.Web
 {
     public class Program
     {
-        public static void Main(string[] args)
+        public static async Task Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
 
@@ -13,8 +20,14 @@ namespace Store.Web
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
-
+            builder.Services.AddScoped<IUnitOfWork,UnitOfWork>();
+            builder.Services.AddDbContext<StoreDbContext>(options=> 
+            {
+                options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
+            });
+           
             var app = builder.Build();
+
 
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
@@ -27,6 +40,7 @@ namespace Store.Web
 
             app.UseAuthorization();
 
+            await ApplySeeding.ApplySeedingAsync(app);
 
             app.MapControllers();
 
