@@ -25,7 +25,7 @@ namespace Store.Repository.Repositories
         => _storeDbContext.Set<TEntity>().Remove(entity);
 
         public async Task<IReadOnlyList<TEntity>> GetAllAsync()
-        =>await _storeDbContext.Set<TEntity>().ToListAsync();
+        =>await _storeDbContext.Set<TEntity>().AsNoTracking().ToListAsync();
         public async Task<TEntity> GetByIDAsync(TKey? id)
         =>await _storeDbContext.Set<TEntity>().FindAsync(id);
 
